@@ -28,9 +28,7 @@ export default function EditWindow({
   setStateFn,
   patchFn,
 }: EditWindowProps) {
-  const { Id, Nazwa, Symbol } = item;
-  const initialState: countryModel = { Id, Nazwa, Symbol };
-  const [currentItem, dispatch] = useReducer(reducer, initialState);
+  const [currentItem, dispatch] = useReducer(reducer, item);
 
   return (
     <div>
