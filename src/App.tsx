@@ -1,24 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import { useApi } from "./api/useApi";
+import "./App.css";
+import EditWindow from "./components/EditWindow";
+import Table from "./components/Table";
+import TableItem from "./components/TableItem";
+import { countryModel } from "./models/countryModel";
 
 function App() {
+  const [items, setItems] = useState<countryModel[]>([]);
+  const [editedItem, setEditedItem] = useState<countryModel | null>(null);
+  const { getItems, patchItem } = useApi(setItems);
+  useEffect(() => {
+    getItems();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Table>
+        {items.map((item) => (
+          <TableItem
+            key={item.Id}
+            Id={item.Id}
+            Nazwa={item.Nazwa}
+            Symbol={item.Symbol}
+            setStateFn={setEditedItem}
+          />
+        ))}
+      </Table>
+      {editedItem !== null && (
+        <EditWindow
+          item={editedItem}
+          setStateFn={setEditedItem}
+          patchFn={patchItem}
+        />
+      )}
     </div>
   );
 }
